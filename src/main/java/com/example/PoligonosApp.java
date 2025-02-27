@@ -132,17 +132,14 @@ public class PoligonosApp extends Application {
      */
     protected List<String> tipoPoligonos(){
         return pontosPoligonos.stream()
-                .map(listaPontos -> {
-                    int numPontos = listaPontos.size();
-                    return switch (numPontos) {
-                        case 3 -> "Triângulo";
-                        case 4 -> "Quadrilátero";
-                        case 5 -> "Pentágono";
-                        case 6 -> "Hexágono";
-                        default -> "Polígono";
-                    };
-                })
-                .toList();
+                .flatMap(listaDePontos -> Stream.of(listaDePontos.size()))
+                .map(numPontos -> switch (numPontos) {
+                    case 3 -> "Triângulo";
+                    case 4 -> "Quadrilátero";
+                    case 5 -> "Pentágono";
+                    case 6 -> "Hexágono";
+                    default -> "Polígono";
+                }).toList();
     }
 
     /**
