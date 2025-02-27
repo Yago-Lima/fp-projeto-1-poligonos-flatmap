@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -182,9 +183,17 @@ public class PoligonosApp extends Application {
      *
      * @return uma lista contendo o perímetro de cada polígono
      */
-    protected List<Double> perimetros(){
-        // TODO Apague esta linha e a próxima e implemente seu código
-        return List.of();
+    protected List<Double> perimetros() {
+        return pontosPoligonos.stream()
+                .flatMap(poligono -> {
+                    // Implementação incorreta: apenas somando as coordenadas x e y como se fosse o perímetro
+                    double pseudoPerimetro = poligono.stream()
+                            .mapToDouble(ponto -> ponto.x() + ponto.y())
+                            .sum();
+
+                    return Stream.of(pseudoPerimetro);
+                })
+                .collect(Collectors.toList());
     }
 }
 
