@@ -184,16 +184,21 @@ public class PoligonosApp extends Application {
      * @return uma lista contendo o perímetro de cada polígono
      */
     protected List<Double> perimetros() {
-        return pontosPoligonos.stream()
+        List<Double> perimetrosCalculados = pontosPoligonos.stream()
                 .flatMap(poligono -> {
-                    // Implementação incorreta: apenas somando as coordenadas x e y como se fosse o perímetro
-                    double pseudoPerimetro = poligono.stream()
-                            .mapToDouble(ponto -> ponto.x() + ponto.y())
-                            .sum();
-
-                    return Stream.of(pseudoPerimetro);
+                    if (poligono.isEmpty() || poligono.size() == 1) {
+                        return Stream.of(0.0);
+                    }
+                    Point ultimoPonto = poligono.get(poligono.size() - 1);
+                    Point resultado = poligono.stream()
+                            .reduce(
+                                    new Point(ultimoPonto, poligono.get(0)),
+                                    (pontoAcumulado, proximoPonto) -> new Point(pontoAcumulado, proximoPonto)
+                            );
+                    return Stream.of(resultado.distance());
                 })
                 .collect(Collectors.toList());
+        return List.of(perimetrosCalculados.toArray(new Double[0]));
     }
 }
 
